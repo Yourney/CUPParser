@@ -10,7 +10,7 @@ A tiny Swift library to **parse and write** Naviter SeeYou `.CUP` waypoint & tas
 ---
 
 ## Requirements
-- **Library:** Swift 5.7+ · iOS 13+ / macOS 11+ / .tvOS(.v13) / .watchOS(.v6) / .macCatalyst(.v13)
+- **Library:** Swift 5.7+ · iOS 13+ / macOS 11+ / tvOS 13+ / watchOS 6+ / macCatalyst 13+
 
 - **Tests:** Swift 6 / Xcode 16 (Swift Testing)
 
@@ -21,7 +21,7 @@ A tiny Swift library to **parse and write** Naviter SeeYou `.CUP` waypoint & tas
 Add to your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/Yourney/CUPParser.git", from: "0.1.0")
+.package(url: "https://github.com/Yourney/CUPParser.git", from: "0.1.0-alpha")
 ```
 
 Or in Xcode: **File → Add Packages…** and paste the repo URL.
