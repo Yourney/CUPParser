@@ -49,11 +49,11 @@ public struct CUPWaypoint: Hashable, Codable, Sendable {
 
 public struct CUPTask: Hashable, Codable, Sendable {
     public var name: String
-    public var waypointCodes: [String]
+    public var waypointNames: [String]
     
-    public init(name: String, waypointCodes: [String]) {
+    public init(name: String, waypointNames: [String]) {
         self.name = name
-        self.waypointCodes = waypointCodes
+        self.waypointNames = waypointNames
     }
 }
 

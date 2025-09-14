@@ -54,7 +54,7 @@ public struct CUPWriter {
                     let landing = "???"
 
                     fields.append(csvAlwaysQuoted(takeoff))
-                    fields.append(contentsOf: task.waypointCodes.map(csvAlwaysQuoted))
+                    fields.append(contentsOf: task.waypointNames.map(csvAlwaysQuoted))
                     fields.append(csvAlwaysQuoted(landing))
 
                     out.append(fields.joined(separator: ","))

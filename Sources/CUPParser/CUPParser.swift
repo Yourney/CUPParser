@@ -100,9 +100,9 @@ public struct CUPParser {
                     guard cols.indices.contains(nameIndex) else { continue }
                     
                     let name = cols[nameIndex].isEmpty ? "Unnamed Task" : cols[nameIndex]
-                    let codes = Array(cols.dropFirst(nameIndex + 1)).filter { !$0.isEmpty }
-                    if !codes.isEmpty {
-                        tasks.append(CUPTask(name: name, waypointCodes: codes))
+                    let names = Array(cols.dropFirst(nameIndex)).filter { !$0.isEmpty }
+                    if !names.isEmpty {
+                        tasks.append(CUPTask(name: name, waypointNames: names))
                     }
             }
         }
