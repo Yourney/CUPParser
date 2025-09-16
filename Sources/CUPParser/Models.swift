@@ -127,6 +127,21 @@ public struct CUPObservationZone: Hashable, Codable, Sendable {
         self.a2Degrees = a2Degrees
         self.isLine = isLine
     }
+    
+    public static var defaultStartObservationZone: CUPObservationZone {
+        // ObsZone=0,Style=2,R1=1000m,A1=180
+        return CUPObservationZone(style: 2, r1Meters: 1000, a1Degrees: 180)
+    }
+    
+    public static var defaultTurnpointObservationZone: CUPObservationZone {
+        // ObsZone=1,Style=1,R1=20000m,A1=45
+        return CUPObservationZone(style: 1, r1Meters: 2000, a1Degrees: 45)
+    }
+    
+    public static var defaultEndObservationZone: CUPObservationZone {
+        // ObsZone=2,Style=3,R1=1000m,A1=180
+        return CUPObservationZone(style: 3, r1Meters: 1000, a1Degrees: 180)
+    }
 }
 
 
@@ -155,6 +170,22 @@ public struct CUPTask: Hashable, Codable, Sendable {
     }
 
     public var waypointNames: [String] { turnpoints.map(\.waypointName) } // convenience
+    
+    public func applyingDefaultObservationZones() -> CUPTask {
+        var turnpoints = self.turnpoints
+        for index in 0 ..< turnpoints.count {
+            switch index {
+                case 0:
+                    turnpoints[0].observationZone = CUPObservationZone.defaultStartObservationZone
+                case turnpoints.count - 1:
+                    turnpoints[index].observationZone = CUPObservationZone.defaultEndObservationZone
+                default:
+                    turnpoints[index].observationZone = CUPObservationZone.defaultTurnpointObservationZone
+            }
+        }
+        
+        return CUPTask(name: self.name, turnpoints: turnpoints)
+    }
 }
 
 // MARK: - Document

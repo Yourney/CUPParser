@@ -10,40 +10,115 @@ import Testing
 @testable import CUPParser
 
 @Suite struct CUPWriterTests {
-    @Test func writesAndParsesBack() throws {
+    
+    @Test func writeOneWayAndParsesBack() throws {
         let wps: [CUPWaypoint] = [
-            CUPWaypoint(title: "Biddinghuizen", code: "BIDD", country: "NL",
-                        latitude: 52.275, longitude: 5.688, elevationMeters: 2,
-                        style: "3", runwayDirection: 90, runwayLengthMeters: 800,
-                        frequency: "122.705", description: "Winch field"),
+            CUPWaypoint(title: "Ithwiesen", code: "EDVT", country: "DE",
+                        latitude: 51.9511167, longitude: 9.66195, elevationMeters: 372,
+                        style: "1", runwayDirection: nil, runwayLengthMeters: nil,
+                        frequency: nil, description: nil),
             CUPWaypoint(title: "Lelystad Airport", code: "EHLE", country: "NL",
                         latitude: 52.292, longitude: 5.5167, elevationMeters: 4,
                         style: "4", runwayDirection: 230, runwayLengthMeters: 2700,
                         frequency: "123.905", description: "ATZ")
         ]
-
-        // Route: takeoff = BIDD, landing = EHLE (no middle TPs)
+        
+        // Route: takeoff = EDVT, landing = EHLE (no middle TPs)
         let task = CUPTask(
             name: "Local Hop",
             turnpoints: [
-                CUPTurnpoint(waypointName: "BIDD"),
+                CUPTurnpoint(waypointName: "EDVT"),
                 CUPTurnpoint(waypointName: "EHLE")
             ]
-        )
+        ) .applyingDefaultObservationZones()
+        
         let tasks = [task]
-
+        
         let text = CUPWriter().makeCUP(waypoints: wps, tasks: tasks, newline: .lf)
         let doc = try CUPParser().parse(text)
-
+        
         #expect(doc.waypoints.count == 2)
         #expect(doc.tasks.count == 1)
-
-        let parsed = doc.tasks[0]
-        #expect(parsed.name == "Local Hop")
-        #expect(parsed.turnpoints.map(\.waypointName) == ["BIDD", "EHLE"])
-
+        
+        let firstTask = doc.tasks[0]
+        #expect(firstTask.name == "Local Hop")
+        #expect(firstTask.turnpoints.map(\.waypointName) == ["EDVT", "EHLE"])
+        
+        let task1Turnpoint1 = firstTask.turnpoints[0]
+        #expect(task1Turnpoint1.waypointName == "EDVT")
+        #expect(task1Turnpoint1.observationZone?.style == 2)
+        #expect(task1Turnpoint1.observationZone?.r1Meters == 1000)
+        #expect(task1Turnpoint1.observationZone?.a1Degrees == 180)
+        
+        let task1Turnpoint2 = firstTask.turnpoints[1]
+        #expect(task1Turnpoint2.waypointName == "EHLE")
+        #expect(task1Turnpoint2.observationZone?.style == 3)
+        #expect(task1Turnpoint2.observationZone?.r1Meters == 1000)
+        #expect(task1Turnpoint2.observationZone?.a1Degrees == 180)
+        
         // No options/starts/OZ were provided, so they should be nil/empty.
-        #expect(parsed.options == nil)
-        #expect(parsed.starts == nil || parsed.starts?.isEmpty == true)
+        #expect(firstTask.options == nil)
+        #expect(firstTask.starts == nil || firstTask.starts?.isEmpty == true)
+    }
+    
+    @Test func writeRetourAndParsesBack() throws {
+        let wps: [CUPWaypoint] = [
+            CUPWaypoint(title: "Terlet", code: "EHTL", country: "NL",
+                        latitude: 52.0572, longitude: 5.9244, elevationMeters: 83,
+                        style: "1", runwayDirection: nil, runwayLengthMeters: nil,
+                        frequency: nil, description: nil),
+            CUPWaypoint(title: "Ithwiesen", code: "EDVT", country: "DE",
+                        latitude: 51.9511167, longitude: 9.66195, elevationMeters: 372,
+                        style: "1", runwayDirection: nil, runwayLengthMeters: nil,
+                        frequency: nil, description: nil),
+            CUPWaypoint(title: "Terlet", code: "EHTL", country: "NL",
+                        latitude: 52.0572, longitude: 5.9244, elevationMeters: 83,
+                        style: "1", runwayDirection: nil, runwayLengthMeters: nil,
+                        frequency: nil, description: nil),
+        ]
+        
+        // Route: takeoff = EDVT, landing = EHLE (no middle TPs)
+        let task = CUPTask(
+            name: "Local Hop",
+            turnpoints: [
+                CUPTurnpoint(waypointName: "EHTL"),
+                CUPTurnpoint(waypointName: "EDVT"),
+                CUPTurnpoint(waypointName: "EHTL")
+            ]
+        ) .applyingDefaultObservationZones()
+        
+        let tasks = [task]
+        
+        let text = CUPWriter().makeCUP(waypoints: wps, tasks: tasks, newline: .lf)
+        let doc = try CUPParser().parse(text)
+        
+        #expect(doc.waypoints.count == 2)
+        #expect(doc.tasks.count == 1)
+        
+        let firstTask = doc.tasks[0]
+        #expect(firstTask.name == "Local Hop")
+        #expect(firstTask.turnpoints.map(\.waypointName) == ["EHTL", "EDVT", "EHTL"])
+        
+        let task1Turnpoint1 = firstTask.turnpoints[0]
+        #expect(task1Turnpoint1.waypointName == "EHTL")
+        #expect(task1Turnpoint1.observationZone?.style == 2)
+        #expect(task1Turnpoint1.observationZone?.r1Meters == 1000)
+        #expect(task1Turnpoint1.observationZone?.a1Degrees == 180)
+        
+        let task1Turnpoint2 = firstTask.turnpoints[1]
+        #expect(task1Turnpoint2.waypointName == "EDVT")
+        #expect(task1Turnpoint2.observationZone?.style == 1)
+        #expect(task1Turnpoint2.observationZone?.r1Meters == 2000)
+        #expect(task1Turnpoint2.observationZone?.a1Degrees == 45)
+        
+        let task1Turnpoint3 = firstTask.turnpoints[2]
+        #expect(task1Turnpoint3.waypointName == "EHTL")
+        #expect(task1Turnpoint3.observationZone?.style == 3)
+        #expect(task1Turnpoint3.observationZone?.r1Meters == 1000)
+        #expect(task1Turnpoint3.observationZone?.a1Degrees == 180)
+        
+        // No options/starts/OZ were provided, so they should be nil/empty.
+        #expect(firstTask.options == nil)
+        #expect(firstTask.starts == nil || firstTask.starts?.isEmpty == true)
     }
 }
