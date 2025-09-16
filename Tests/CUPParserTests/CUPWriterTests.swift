@@ -62,7 +62,7 @@ import Testing
     }
     
     @Test func writeRetourAndParsesBack() throws {
-        let wps: [CUPWaypoint] = [
+        let waypoints: [CUPWaypoint] = [
             CUPWaypoint(title: "Terlet", code: "EHTL", country: "NL",
                         latitude: 52.0572, longitude: 5.9244, elevationMeters: 83,
                         style: "1", runwayDirection: nil, runwayLengthMeters: nil,
@@ -77,19 +77,17 @@ import Testing
                         frequency: nil, description: nil),
         ]
         
-        // Route: takeoff = EDVT, landing = EHLE (no middle TPs)
+        // Route: takeoff = Terlet, turnpoint at Ithwiesen, landing = Terlet
         let task = CUPTask(
             name: "Local Hop",
             turnpoints: [
-                CUPTurnpoint(waypointName: "EHTL"),
-                CUPTurnpoint(waypointName: "EDVT"),
-                CUPTurnpoint(waypointName: "EHTL")
+                CUPTurnpoint(waypointName: "Terlet"),
+                CUPTurnpoint(waypointName: "Ithwiesen"),
+                CUPTurnpoint(waypointName: "Terlet")
             ]
         ) .applyingDefaultObservationZones()
-        
-        let tasks = [task]
-        
-        let text = CUPWriter().makeCUP(waypoints: wps, tasks: tasks, newline: .lf)
+                
+        let text = CUPWriter().makeCUP(waypoints: waypoints, tasks: [task], newline: .lf)
         let doc = try CUPParser().parse(text)
         
         #expect(doc.waypoints.count == 2)
@@ -97,22 +95,22 @@ import Testing
         
         let firstTask = doc.tasks[0]
         #expect(firstTask.name == "Local Hop")
-        #expect(firstTask.turnpoints.map(\.waypointName) == ["EHTL", "EDVT", "EHTL"])
+        #expect(firstTask.turnpoints.map(\.waypointName) == ["Terlet", "Ithwiesen", "Terlet"])
         
         let task1Turnpoint1 = firstTask.turnpoints[0]
-        #expect(task1Turnpoint1.waypointName == "EHTL")
+        #expect(task1Turnpoint1.waypointName == "Terlet")
         #expect(task1Turnpoint1.observationZone?.style == 2)
         #expect(task1Turnpoint1.observationZone?.r1Meters == 1000)
         #expect(task1Turnpoint1.observationZone?.a1Degrees == 180)
         
         let task1Turnpoint2 = firstTask.turnpoints[1]
-        #expect(task1Turnpoint2.waypointName == "EDVT")
+        #expect(task1Turnpoint2.waypointName == "Ithwiesen")
         #expect(task1Turnpoint2.observationZone?.style == 1)
         #expect(task1Turnpoint2.observationZone?.r1Meters == 2000)
         #expect(task1Turnpoint2.observationZone?.a1Degrees == 45)
         
         let task1Turnpoint3 = firstTask.turnpoints[2]
-        #expect(task1Turnpoint3.waypointName == "EHTL")
+        #expect(task1Turnpoint3.waypointName == "Terlet")
         #expect(task1Turnpoint3.observationZone?.style == 3)
         #expect(task1Turnpoint3.observationZone?.r1Meters == 1000)
         #expect(task1Turnpoint3.observationZone?.a1Degrees == 180)
