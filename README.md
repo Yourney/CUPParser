@@ -61,11 +61,10 @@ try writer.write(waypoints: waypoints, tasks: tasks, to: url)
 ---
 
 ## Contributing
-Issues and pull requests are welcome — especially for:
-- Observation zone / turnpoint style support
-- Additional field parsing & validation
+Issues and pull requests are welcome
+- Bug reports and feature requests
 - Performance improvements for very large CUP files
-
+- Additional test cases
 ---
 
 ## License
