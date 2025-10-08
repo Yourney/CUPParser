@@ -1,13 +1,13 @@
 {
-  "originHash" : "c3bfc2eea21e9933cfcd8c23e011e5bc3a9de8c9d0da31c94c26e999970ebb0f",
+  "originHash" : "4151a03e9b9a6f2f4bb42f3dc7623ff60d004e96da6c69c7f15308a1b4464253",
   "pins" : [
     {
       "identity" : "swift-case-paths",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
       "state" : {
-        "revision" : "9810c8d6c2914de251e072312f01d3bf80071852",
-        "version" : "1.7.1"
+        "revision" : "6989976265be3f8d2b5802c722f9ba168e227c71",
+        "version" : "1.7.2"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swiftlang/swift-syntax",
       "state" : {
-        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
-        "version" : "601.0.1"
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
       }
     },
     {
@@ -33,8 +33,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "b2ed9eabefe56202ee4939dd9fc46b6241c88317",
-        "version" : "1.6.1"
+        "revision" : "4c27acf5394b645b70d8ba19dc249c0472d5f618",
+        "version" : "1.7.0"
+      }
+    },
+    {
+      "identity" : "zipfoundation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/weichsel/ZIPFoundation",
+      "state" : {
+        "revision" : "22787ffb59de99e5dc1fbfe80b19c97a904ad48d",
+        "version" : "0.9.20"
       }
     }
   ],
